@@ -1,1 +1,80 @@
-这是一个史诗级的项目！！！
+CREATE TABLE user (
+                      user_id VARCHAR (32) NOT NULL COMMENT ' 用户唯一 ID（UUID）',
+                      phone VARCHAR (16) DEFAULT NULL COMMENT ' 手机号（普通注册用户必填，微信登录用户可选，加密存储）',
+                      password VARCHAR (64) DEFAULT NULL COMMENT ' 登录密码（普通注册用户必填，微信登录用户为空，BCrypt 加密）',
+                      nickname VARCHAR (64) NOT NULL COMMENT ' 用户昵称（微信登录同步微信昵称，普通注册用户自定义）',
+                      avatar VARCHAR (255) DEFAULT NULL COMMENT ' 头像 URL（微信登录同步微信头像，普通注册用户可选）',
+                      constitution VARCHAR (32) DEFAULT NULL COMMENT ' 体质标签（枚举值：阴虚 / 阳虚 / 平和 / 痰湿等，与接口一致）',
+                      diet_taboo JSON DEFAULT NULL COMMENT ' 饮食禁忌食材（数组格式：["螃蟹","苦瓜"]）',
+                      flavor_prefer VARCHAR (32) DEFAULT NULL COMMENT ' 偏好口味（枚举值：清淡 / 甜 / 咸鲜等）',
+                      has_complete TINYINT (1) NOT NULL DEFAULT 0 COMMENT ' 是否完善信息（0 - 未完善，1 - 已完善）',
+                      create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT ' 用户创建时间 ',
+                      update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT ' 信息更新时间 ',
+                      PRIMARY KEY (user_id),
+                      UNIQUE KEY uk_phone (phone),
+                      KEY idx_constitution (constitution)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT=' 用户表 ';
+
+
+
+
+
+DROP TABLE IF EXISTS search_history;
+CREATE TABLE search_history (
+                                history_id VARCHAR (32) NOT NULL COMMENT ' 搜索记录唯一 ID（UUID）',
+                                user_id VARCHAR (32) NOT NULL COMMENT ' 搜索用户 ID（关联 user 表 user_id）',
+                                keyword VARCHAR (128) NOT NULL COMMENT ' 搜索关键词（如 “茯苓”“养胃药膳”）',
+                                content_types VARCHAR (128) DEFAULT NULL COMMENT ' 筛选内容类型（逗号分隔：post,video,ai_recipe）',
+                                filters JSON DEFAULT NULL COMMENT ' 高级筛选条件（如 {"efficacy":"祛湿","season":"夏季"}）',
+                                sort_type ENUM ('relevance','hot','new') DEFAULT 'relevance' COMMENT ' 排序方式（relevance - 相关度，hot - 热度，new - 最新）',
+                                search_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT ' 搜索时间 ',
+                                is_deleted TINYINT (1) NOT NULL DEFAULT 0 COMMENT ' 软删除标记（0 - 正常，1 - 删除）',
+                                PRIMARY KEY (history_id),
+                                KEY idx_user_search_time (user_id,search_time),
+                                KEY idx_keyword (keyword),
+                                KEY idx_is_deleted (is_deleted)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT=' 搜索历史表 ';
+
+
+
+DROP TABLE IF EXISTS season_config;
+CREATE TABLE season_config (
+season_id VARCHAR (32) NOT NULL COMMENT ' 时令唯一 ID（UUID）',
+season_name VARCHAR (64) NOT NULL COMMENT ' 时令名称（如 “夏季 - 芒种”“秋季 - 立秋”）',
+season ENUM ('spring','summer','autumn','winter') NOT NULL COMMENT ' 季节（spring - 春，summer - 夏，autumn - 秋，winter - 冬）',
+solar_term VARCHAR (32) DEFAULT NULL COMMENT ' 节气（如 “芒种”“立秋”）',
+health_tips VARCHAR (255) NOT NULL COMMENT ' 时令养生要点 ',
+suitable_ingredients JSON DEFAULT NULL COMMENT ' 适合时令的食材（数组格式：["薏米","冬瓜"]）',
+start_date DATE NOT NULL COMMENT ' 时令开始日期（如 2024-06-05）',
+end_date DATE NOT NULL COMMENT ' 时令结束日期（如 2024-06-20）',
+create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT ' 创建时间 ',
+update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT ' 更新时间 ',
+PRIMARY KEY (season_id),
+KEY idx_season_name (season_name),
+KEY idx_season_solar_term (season,solar_term),
+KEY idx_start_end_date (start_date,end_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT=' 时令配置表 ';
+
+
+DROP TABLE IF EXISTS ai_recipe;
+CREATE TABLE ai_recipe (
+recipe_id VARCHAR (32) NOT NULL COMMENT 'AI 配方唯一 ID（UUID）',
+user_id VARCHAR (32) NOT NULL COMMENT ' 生成用户 ID（关联 user 表 user_id）',
+generate_type ENUM ('herbal_meal','herbal_milk_tea') NOT NULL COMMENT ' 生成类型（herbal_meal - 药膳，herbal_milk_tea - 中药奶茶）',
+recipe_name VARCHAR (128) NOT NULL COMMENT ' 配方名称（如 “低糖百合银耳奶茶（阴虚体质专属）”）',
+ingredients JSON NOT NULL COMMENT ' 食材清单（含用量、功效：[{"name":"银耳","amount":"15g","effect":"滋阴润燥"}]）',
+make_steps JSON NOT NULL COMMENT ' 制作步骤（数组格式：["1. 银耳泡发...","2. 煮至出胶..."]）',
+adapt_efficacy VARCHAR (255) NOT NULL COMMENT ' 适配功效 ',
+taboo_tips VARCHAR (255) DEFAULT NULL COMMENT ' 禁忌提示 ',
+season VARCHAR (64) DEFAULT NULL COMMENT ' 时令（如 “夏季 - 芒种”）',
+extra_demand VARCHAR (128) DEFAULT NULL COMMENT ' 额外需求（如 “低糖”“适合上班族”）',
+cover VARCHAR (255) DEFAULT NULL COMMENT ' 配方封面图（默认图或生成图）',
+generate_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT ' 生成时间 ',
+is_deleted TINYINT (1) NOT NULL DEFAULT 0 COMMENT ' 软删除标记（0 - 正常，1 - 删除）',
+PRIMARY KEY (recipe_id),
+KEY idx_user_id (user_id),
+KEY idx_generate_type_season (generate_type,season),
+KEY idx_adapt_efficacy (adapt_efficacy),
+KEY idx_generate_time (generate_time),
+KEY idx_is_deleted (is_deleted)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI 配方表 ';

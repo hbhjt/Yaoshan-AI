@@ -1,35 +1,37 @@
 package com.yaoshan.backend.controller.user;
 
-import com.yaoshan.backend.entity.User;
+
+import com.yaoshan.backend.common.Result;
+import com.yaoshan.backend.pojo.User;
 import com.yaoshan.backend.service.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
-
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
-        User registeredUser = userService.register(user);
-        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
+    @PostMapping
+    public Result<Boolean> create(@RequestBody User user) {
+        return Result.success(userService.save(user));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
-        User loggedInUser = userService.login(user.getUsername(), user.getPassword());
-        if (loggedInUser!= null) {
-            return new ResponseEntity<>(loggedInUser, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+    @GetMapping("/{id}")
+    public Result<User> get(@PathVariable String id) {
+        return Result.success(userService.getById(id));
+    }
+
+    @GetMapping
+    public Result<List<User>> getAll() {
+        return Result.success(userService.list());
+    }
+
+    @DeleteMapping("/{id}")
+    public Result<Boolean> delete(@PathVariable String id) {
+        return Result.success(userService.removeById(id));
     }
 }

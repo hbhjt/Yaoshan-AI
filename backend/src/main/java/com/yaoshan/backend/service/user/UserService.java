@@ -1,8 +1,7 @@
 package com.yaoshan.backend.service.user;
 
-import com.yaoshan.backend.entity.User;
 
-public interface UserService {
-    User register(User user);
-    User login(String username, String password);
-}
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.yaoshan.backend.pojo.User;
+
+public interface UserService extends IService<User> {}
