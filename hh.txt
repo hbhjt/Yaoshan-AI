@@ -16,7 +16,7 @@ CREATE TABLE user (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT=' 用户表 ';
 
 
-
+12313213
 
 
 DROP TABLE IF EXISTS search_history;
