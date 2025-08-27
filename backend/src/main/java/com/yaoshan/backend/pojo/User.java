@@ -23,9 +23,9 @@ public class User {
     // JSON 字段，建议存 String，使用时再转 List<String>
     private String dietTaboo;
 
-    @TableField(fill = FieldFill.INSERT)
+    @TableField(fill = FieldFill.INSERT)  // 插入时填充
     private LocalDateTime createTime;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)  // 插入和更新时填充
     private LocalDateTime updateTime;
 }
