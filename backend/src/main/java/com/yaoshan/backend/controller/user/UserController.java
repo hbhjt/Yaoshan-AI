@@ -2,9 +2,13 @@ package com.yaoshan.backend.controller.user;
 
 
 import com.yaoshan.backend.common.Result;
+import com.yaoshan.backend.dto.UserLoginParam;
+import com.yaoshan.backend.dto.UserRegisterParam;
+import com.yaoshan.backend.exception.BusinessException;
 import com.yaoshan.backend.pojo.User;
 import com.yaoshan.backend.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +18,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    @PostMapping("/register")
+    public Result<User> register(@Validated @RequestBody UserRegisterParam registerParam) {
+        try {
+            User user = userService.register(registerParam);
+            return Result.success(user);
+        } catch (BusinessException e) {
+            return Result.error(e.getMessage());
+        }
+    }
+    // 手机号登录接口
+    @PostMapping("/login/phone")
+    public Result<User> loginByPhone(@Validated @RequestBody UserLoginParam loginParam) {
+        try {
+            User user = userService.loginByPhone(loginParam.getPhone(), loginParam.getPassword());
+            return Result.success(user);
+        } catch (BusinessException e) {
+            return Result.error(e.getMessage());
+        }
+    }
 
     @PostMapping
     public Result<Boolean> create(@RequestBody User user) {
