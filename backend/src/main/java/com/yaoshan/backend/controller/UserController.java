@@ -1,12 +1,12 @@
 package com.yaoshan.backend.controller;
 
+import com.yaoshan.backend.exception.LoginFailedException;
 import com.yaoshan.backend.pojo.Result;
 import com.yaoshan.backend.pojo.User;
 import com.yaoshan.backend.pojo.UserLoginDTO;
 import com.yaoshan.backend.pojo.UserLoginVO;
 import com.yaoshan.backend.service.UserService;
 import com.yaoshan.backend.utils.JwtUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +24,13 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
+    //初始化日历对象
     private static Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -41,7 +45,7 @@ public class UserController {
      * 用户注册
      * @return
      */
-    @PostMapping("/login")
+    @PostMapping("/register")
     public Result userLogin(@RequestBody User user){
         log.info("用户注册:{}",user);
 
@@ -55,48 +59,57 @@ public class UserController {
      * 用户微信登录
      * @return
      */
-    @PostMapping("/user/login")
-    public Result<UserLoginVO> wxlogin(@RequestBody UserLoginDTO userLoginDTO){
-        log.info("微信用户登录:{}",userLoginDTO.getCode());
+    @PostMapping("/wx/login") // 建议修正路径为/wx/login，避免与普通登录混淆
+    public Result<UserLoginVO> wxlogin(@RequestBody UserLoginDTO userLoginDTO) {
+        log.info("微信用户登录:{}", userLoginDTO.getCode());
+        try {
+            // 1. 调用Service获取用户信息
+            User user = userService.wxlogin(userLoginDTO);
 
-        //调用微信登录
-        User user = userService.wxlogin(userLoginDTO);
+            // 2. 生成JWT令牌（只传claims，其他参数由JwtUtil从JwtConfig中获取）
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("userId", user.getUserId());
+            String token = jwtUtil.createJWT(claims); // 修正：用注入的jwtUtil实例调用，只传claims
 
-        //调用jwt令牌
-        Map<String,Object> claims = new HashMap<>();
-        claims.put("userId",user.getUserId());
-        String token = JwtUtil.createJWT(secret, expiration, claims);
-
-        UserLoginVO userLoginVO = UserLoginVO.builder()
-                .id(user.getUserId())
-                .openid(user.getOpenid())
-                .token(token)
-                .build();
-        return Result.success(userLoginVO);
-    }
-
-    // 获取当前用户信息（依赖JWT Filter提前解析 userId）
-    @GetMapping("/profile")
-    public User getProfile(HttpServletRequest request) {
-        Long userId = (Long) request.getAttribute("userId");
-        if (userId == null) {
-            throw new RuntimeException("未登录或Token无效");
+            // 3. 构建返回VO
+            UserLoginVO userLoginVO = UserLoginVO.builder()
+                    .id(user.getUserId())
+                    .openid(user.getOpenid())
+                    .token(token)
+                    .build();
+            return Result.success(userLoginVO);
+        } catch (LoginFailedException e) {
+            log.error("微信登录失败：{}", e.getMessage());
+            return Result.error(e.getMessage());
+        } catch (Exception e) {
+            log.error("微信登录异常：", e);
+            return Result.error("系统繁忙，请稍后再试");
         }
-        return userService.findById(userId);
     }
 
-    // 更新用户偏好（体质标签 / 饮食禁忌 / 口味偏好）
-    @PutMapping("/preferences")
-    public Map<String, Object> updatePreferences(HttpServletRequest request,
-                                                 @RequestBody User update) {
-        Long userId = (Long) request.getAttribute("userId");
-        if (userId == null) {
-            throw new RuntimeException("未登录或Token无效");
-        }
-        update.setUserId(userId);
-        userService.updateUser(update);
-        return Map.of("status", 200, "message", "用户偏好更新成功");
-    }
+    //TODO 获取当前用户信息（依赖JWT Filter提前解析 userId）
+//    @GetMapping("/profile")
+//    public User getProfile(HttpServletRequest request) {
+//        Long userId = (Long) request.getAttribute("userId");
+//        if (userId == null) {
+//            throw new RuntimeException("未登录或Token无效");
+//        }
+//        return userService.findById(userId);
+//    }
+
+
+    // TODO 更新用户偏好（体质标签 / 饮食禁忌 / 口味偏好）
+//    @PutMapping("/preferences")
+//    public Map<String, Object> updatePreferences(HttpServletRequest request,
+//                                                 @RequestBody User update) {
+//        Long userId = (Long) request.getAttribute("userId");
+//        if (userId == null) {
+//            throw new RuntimeException("未登录或Token无效");
+//        }
+//        update.setUserId(userId);
+//        userService.updateUser(update);
+//        return Map.of("status", 200, "message", "用户偏好更新成功");
+//    }
 
     // 管理员或测试用：获取所有用户
     @GetMapping("/list")
