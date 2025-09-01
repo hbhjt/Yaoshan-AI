@@ -1,0 +1,52 @@
+<!--pages/milk/milk.wxml-->
+<view class="swiper">
+  <swiper autoplay interval="3000" indicator-dots indicator-color>
+    <swiper-item>
+      <image class="swiper-image" src="/assets/pills.png" mode="aspectFit" show-menu-by-longpress></image>
+    </swiper-item>
+    <swiper-item>
+      <image class="swiper-image" src="/assets/scan.png" mode="aspectFit" show-menu-by-longpress></image>
+    </swiper-item>
+    <swiper-item>
+      <image class="swiper-image" src="/assets/profile-active.png" mode="aspectFit" show-menu-by-longpress></image>
+    </swiper-item>
+  </swiper>
+</view>
+
+<!-- 导航栏 -->
+<view class="tab-container">
+  <view class="tab-bar">
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="index" 
+      class="tab-item {{currentTab === index ? 'active' : ''}}" 
+      bindtap="onTabChange" 
+      data-index="{{index}}"
+    >
+      {{item}}
+    </view>
+  </view>
+
+  <!-- 内容区域：根据当前标签切换内容 -->
+  <swiper class="swiper-con" current="{{currentTab}}" duration="300">
+    <swiper-item wx:for="{{tabs}}" wx:key="index">
+      <view class="content">
+        <block wx:for="{{tabContents[index].sections}}" wx:key="index">
+          <view class="section">
+            <view class="section-title">{{item.title}}</view>
+            <view class="drink-item" wx:for="{{item.drinks}}" wx:key="id" bindtap="onDrinkTap" data-id="{{item.id}}" >
+            <image class="drink-image" src="{{item.image}}" mode="aspectFit"></image>
+  <view class="drink-text">
+    <view class="drink-name">{{item.name}}</view>
+    <view class="drink-desc">{{item.desc}}</view>
+    <view class="drink-tags">
+      <view class="tag" wx:for="{{item.tags}}" wx:key="index">{{item}}</view>
+                </view>
+              </view>
+             </view>
+           </view>
+        </block>
+      </view>
+    </swiper-item>
+  </swiper>
+</view>

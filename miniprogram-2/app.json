@@ -1,0 +1,58 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/meal/meal",
+    "pages/milk/milk",
+    "pages/collect/collect",
+    "pages/profile/profile",
+    "pages/list/list",
+    "pages/soup-detail/soup-detail",
+    "pages/medicine/medicine",
+    "pages/tea/tea",
+    "pages/milk-detail/milk-detail"
+  ],
+  "window": {
+   "navigationBarTitleText": "智膳坊",
+   "navigationBarBackgroundColor": "#90ee90",
+   "enablePullDownRefresh": false,
+   "backgroundColor": "#efefef"
+  },
+  "tabBar": {
+    "borderStyle":"white",
+    "list":[
+      {
+        "text": "首页",
+        "pagePath": "pages/index/index",
+        "iconPath": "/assets/index.png",
+        "selectedIconPath": "/assets/index-active.png"
+      },
+      {
+        "text": "AI药膳",
+        "pagePath": "pages/meal/meal",
+        "iconPath": "/assets/meal.png",
+        "selectedIconPath": "/assets/meal-active.png"
+      },
+      {
+        "text": "中药奶茶",
+        "pagePath": "pages/milk/milk",
+        "iconPath": "/assets/milk.png",
+        "selectedIconPath": "/assets/milk-active.png"
+      },
+      {
+        "text": "收藏",
+        "pagePath": "pages/collect/collect",
+        "iconPath": "/assets/collect.png",
+        "selectedIconPath": "/assets/collect-active.png"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/profile/profile",
+        "iconPath": "/assets/profile.png",
+        "selectedIconPath": "/assets/profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
