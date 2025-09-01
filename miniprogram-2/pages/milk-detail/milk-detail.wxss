@@ -1,0 +1,57 @@
+/* pages/milk-detail/milk-detail.wxss */
+.detail-container {
+  background-color: #fff;
+  min-height: 100vh;
+}
+.drink-img {
+  width: 100%;
+  height: auto;
+}
+.basic-info {
+  padding: 30rpx;
+  border-bottom: 1px solid #f5f5f5;
+}
+.name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15rpx;
+}
+.price {
+  font-size: 32rpx;
+  color: #e63946;
+  margin-bottom: 20rpx;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+}
+.tag {
+  background-color: #e6f7ed;
+  color: #00b388;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  margin-right: 10rpx;
+  margin-bottom: 10rpx;
+  font-size: 24rpx;
+}
+.section {
+  padding: 30rpx;
+  border-bottom: 1px solid #f5f5f5;
+}
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-left: 10rpx;
+  border-left: 4rpx solid #0f4c81;
+}
+.section-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 44rpx;
+}
+.ingredient {
+  margin-bottom: 10rpx;
+}

@@ -59,7 +59,7 @@ public class UserController {
      * 用户微信登录
      * @return
      */
-    @PostMapping("/wx/login") // 建议修正路径为/wx/login，避免与普通登录混淆
+    @PostMapping("/wx/login")
     public Result<UserLoginVO> wxlogin(@RequestBody UserLoginDTO userLoginDTO) {
         log.info("微信用户登录:{}", userLoginDTO.getCode());
         try {
