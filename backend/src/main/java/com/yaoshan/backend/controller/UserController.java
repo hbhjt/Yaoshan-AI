@@ -16,16 +16,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * 用户操作
+ * 用户操作控制器
+ * 提供用户注册、登录、信息获取及偏好设置等功能
  */
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    //初始化日历对象
-    private static Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    
     @Autowired
     private UserService userService;
 
@@ -43,21 +45,25 @@ public class UserController {
 
     /**
      * 用户注册
-     * @return
+     * @return 注册结果信息
      */
     @PostMapping("/register")
-    public Result userLogin(@RequestBody User user){
-        log.info("用户注册:{}",user);
-
-        //调用service注册用户信息
-        userService.login(user);
-
-        return Result.success();
+    public Result<String> userRegister(@RequestBody User user){
+        log.info("用户注册:{}", user);
+        try {
+            //调用service注册用户信息
+            userService.login(user);
+            return Result.success("注册成功");
+        } catch (Exception e) {
+            log.error("用户注册失败: {}", e.getMessage(), e);
+            return Result.error("注册失败：" + e.getMessage());
+        }
     }
 
     /**
-     * 用户微信登录
-     * @return
+     * 用户微信登录接口
+     * @param userLoginDTO 包含微信登录code的请求体
+     * @return 登录结果，包含用户信息和JWT令牌
      */
     @PostMapping("/wx/login")
     public Result<UserLoginVO> wxlogin(@RequestBody UserLoginDTO userLoginDTO) {
@@ -87,36 +93,56 @@ public class UserController {
         }
     }
 
-    //TODO 获取当前用户信息（依赖JWT Filter提前解析 userId）
-//    @GetMapping("/profile")
-//    public User getProfile(HttpServletRequest request) {
-//        Long userId = (Long) request.getAttribute("userId");
-//        if (userId == null) {
-//            throw new RuntimeException("未登录或Token无效");
-//        }
-//        return userService.findById(userId);
-//    }
+    /**
+     * 获取当前用户信息（依赖JWT拦截器提前解析userId）
+     */
+    @GetMapping("/profile")
+    public Result<User> getProfile(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        if (userId == null) {
+            return Result.error("未登录或Token无效");
+        }
+        User user = userService.findById(userId);
+        return Result.success(user);
+    }
 
-
-    // TODO 更新用户偏好（体质标签 / 饮食禁忌 / 口味偏好）
-//    @PutMapping("/preferences")
-//    public Map<String, Object> updatePreferences(HttpServletRequest request,
-//                                                 @RequestBody User update) {
-//        Long userId = (Long) request.getAttribute("userId");
-//        if (userId == null) {
-//            throw new RuntimeException("未登录或Token无效");
-//        }
-//        update.setUserId(userId);
-//        userService.updateUser(update);
-//        return Map.of("status", 200, "message", "用户偏好更新成功");
-//    }
+    /**
+     * 更新用户偏好设置（体质标签 / 饮食禁忌 / 口味偏好）
+     */
+    @PutMapping("/preferences")
+    public Result<String> updatePreferences(HttpServletRequest request, @RequestBody User update) {
+        try {
+            Long userId = (Long) request.getAttribute("userId");
+            if (userId == null) {
+                return Result.error("未登录或Token无效");
+            }
+            // 获取当前用户信息，确保只更新偏好相关字段
+            User currentUser = userService.findById(userId);
+            if (currentUser == null) {
+                return Result.error("用户不存在");
+            }
+            
+            // 只更新体质标签、饮食禁忌和口味偏好
+            currentUser.setPhysiqueTags(update.getPhysiqueTags());
+            currentUser.setDietaryRestrictions(update.getDietaryRestrictions());
+            currentUser.setTastePreferences(update.getTastePreferences());
+            
+            userService.updateUser(currentUser);
+            log.info("用户ID: {} 偏好设置更新成功", userId);
+            return Result.success("用户偏好更新成功");
+        } catch (Exception e) {
+            log.error("用户偏好更新失败: {}", e.getMessage(), e);
+            return Result.error("用户偏好更新失败，请稍后重试");
+        }
+    }
 
     // 管理员或测试用：获取所有用户
     @GetMapping("/list")
-    public Result findAllUsers() {
+    public Result<List<User>> findAllUsers() {
         log.info("查询全部用户信息");
         //调用service查询用户信息
         List<User> userList = userService.findAll();
+        log.info("成功查询到{}条用户数据", userList.size());
         return Result.success(userList);
     }
 }

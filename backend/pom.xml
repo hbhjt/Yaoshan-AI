@@ -31,6 +31,7 @@
         <!-- 显式声明依赖版本，与Spring Boot 3.5.5兼容 -->
         <mybatis-spring-boot.version>3.0.5</mybatis-spring-boot.version>
         <mysql-connector.version>8.3.0</mysql-connector.version> <!-- 与MySQL 8.x兼容的最新版本 -->
+        <lombok.version>1.18.30</lombok.version>
     </properties>
     <dependencies>
         <dependency>
@@ -149,6 +150,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
