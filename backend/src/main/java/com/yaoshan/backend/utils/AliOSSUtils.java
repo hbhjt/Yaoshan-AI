@@ -45,7 +45,15 @@ public class AliOSSUtils {
 
         // 避免文件覆盖
         String originalFilename = file.getOriginalFilename();
-        String fileName = UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
+        // 检查原始文件名是否为null
+        if (originalFilename == null) {
+            originalFilename = "file";
+        }
+        
+        // 检查文件名是否包含扩展名
+        int dotIndex = originalFilename.lastIndexOf(".");
+        String extension = dotIndex > 0 ? originalFilename.substring(dotIndex) : "";
+        String fileName = UUID.randomUUID().toString() + extension;
 
         //上传文件到 OSS
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
