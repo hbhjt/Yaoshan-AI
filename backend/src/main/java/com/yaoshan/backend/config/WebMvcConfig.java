@@ -29,11 +29,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 // 配置需要拦截的路径（所有需要登录认证的接口，用Ant风格路径匹配）
                 .addPathPatterns(ApiPathConstant.USER_PROFILE_PATH)       // 个人信息相关接口
                 .addPathPatterns(ApiPathConstant.USER_PREFERENCES_PATH)  // 用户偏好设置相关接口
-                .addPathPatterns(ApiPathConstant.USER_ORDER_PATH)        // 订单相关接口
                 // 配置不需要拦截的路径（公开接口、静态资源等）
                 .excludePathPatterns(ApiPathConstant.USER_LOGIN_PATH)        // 普通用户登录接口
                 .excludePathPatterns(ApiPathConstant.USER_WX_LOGIN_PATH)     // 微信登录接口
-                .excludePathPatterns(ApiPathConstant.USER_REGISTER_PATH)     // 注册接口
+                .excludePathPatterns(ApiPathConstant.USER_REGISTER_PATH)     // 普通用户注册接口
                 .excludePathPatterns(ApiPathConstant.USER_LIST_PATH)         // 用户列表查询接口（管理员）
                 .excludePathPatterns(ApiPathConstant.STATIC_RESOURCE_PATH)   // 静态资源路径
                 .excludePathPatterns(ApiPathConstant.SWAGGER_UI_PATH)        // Swagger文档路径
