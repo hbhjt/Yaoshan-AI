@@ -1,10 +1,13 @@
 package com.yaoshan.backend.controller;
 
 import com.yaoshan.backend.exception.LoginFailedException;
+import com.yaoshan.backend.exception.PasswordErrorException;
+import com.yaoshan.backend.pojo.NormalUserLoginDTO;
 import com.yaoshan.backend.pojo.Result;
 import com.yaoshan.backend.pojo.User;
 import com.yaoshan.backend.pojo.UserLoginDTO;
 import com.yaoshan.backend.pojo.UserLoginVO;
+import com.yaoshan.backend.pojo.UserRegisterDTO;
 import com.yaoshan.backend.service.UserService;
 import com.yaoshan.backend.utils.JwtUtil;
 import org.slf4j.Logger;
@@ -44,15 +47,16 @@ public class UserController {
     private String tokenName;
 
     /**
-     * 用户注册
+     * 用户注册接口
+     * @param registerDTO 注册信息
      * @return 注册结果信息
      */
     @PostMapping("/register")
-    public Result<String> userRegister(@RequestBody User user){
-        log.info("用户注册:{}", user);
+    public Result<String> userRegister(@RequestBody UserRegisterDTO registerDTO){
+        log.info("用户注册:{}", registerDTO);
         try {
             //调用service注册用户信息
-            userService.login(user);
+            userService.register(registerDTO);
             return Result.success("注册成功");
         } catch (Exception e) {
             log.error("用户注册失败: {}", e.getMessage(), e);
@@ -93,6 +97,36 @@ public class UserController {
         }
     }
 
+    @PostMapping("/normal/login")
+    public Result<UserLoginVO> normalLogin(@RequestBody NormalUserLoginDTO loginDTO) {
+        log.info("普通用户登录:{}", loginDTO);
+        try {
+            // 调用service层的普通登录方法
+            User user = userService.normalLogin(loginDTO);
+
+            // 生成JWT令牌
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("userId", user.getUserId());
+            String token = jwtUtil.createJWT(claims);
+            
+            // 封装返回结果
+            UserLoginVO userLoginVO = new UserLoginVO();
+            userLoginVO.setId(user.getUserId());
+            userLoginVO.setToken(token);
+            
+            return Result.success(userLoginVO);
+        } catch (LoginFailedException e) {
+            log.error("登录失败：", e);
+            return Result.error(e.getMessage());
+        } catch (PasswordErrorException e) {
+            log.error("密码错误：", e);
+            return Result.error(e.getMessage());
+        } catch (Exception e) {
+            log.error("系统异常：", e);
+            return Result.error("系统繁忙，请稍后再试");
+        }
+    }
+    
     /**
      * 获取当前用户信息（依赖JWT拦截器提前解析userId）
      */

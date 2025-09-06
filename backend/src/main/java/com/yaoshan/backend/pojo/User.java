@@ -18,6 +18,7 @@ public class User implements Serializable {
     private Long userId;               // 用户ID
     private String openid;             // 微信OpenID
     private String phone;              // 手机号
+    private String password;           // 密码
     private String nickname;           // 昵称
     private String avatarUrl;          // 头像URL
     private String physiqueTags;       // 体质标签（如阴虚/阳虚）

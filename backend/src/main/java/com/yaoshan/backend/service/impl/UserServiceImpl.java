@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yaoshan.backend.constant.MessageConstant;
 import com.yaoshan.backend.exception.LoginFailedException;
+import com.yaoshan.backend.exception.PasswordErrorException;
 import com.yaoshan.backend.mapper.UserMapper;
+import com.yaoshan.backend.pojo.NormalUserLoginDTO;
 import com.yaoshan.backend.pojo.User;
 import com.yaoshan.backend.pojo.UserLoginDTO;
+import com.yaoshan.backend.pojo.UserRegisterDTO;
 import com.yaoshan.backend.service.UserService;
 import com.yaoshan.backend.utils.HttpClientUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +21,13 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Value("${wx.appid}")
     private String appid;
@@ -145,5 +151,63 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
+    }
+
+    public User normalLogin(NormalUserLoginDTO loginDTO) {
+
+         log.info("普通用户登录：手机号={}", loginDTO.getPhone());
+
+        // 根据手机号查询用户
+        User user = userMapper.findByPhone(loginDTO.getPhone());
+        if (user == null) {
+            throw new LoginFailedException(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
+
+        // 验证密码
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
+        }
+
+        return user;
+    }
+
+    /**
+     * 用户注册
+     * @param registerDTO
+     */
+    @Override
+    public void register(UserRegisterDTO registerDTO) {
+
+        log.info("用户注册：手机号={}", registerDTO.getPhone());
+        
+        //校验参数
+        if (registerDTO.getPhone() == null || registerDTO.getPassword() == null || registerDTO.getConfirmPassword() == null) {
+            throw new IllegalArgumentException("手机号和密码不能为空");
+        }
+        
+        //校验两次密码是否一致
+        if (!registerDTO.getPassword().equals(registerDTO.getConfirmPassword())) {
+            throw new IllegalArgumentException("两次输入的密码不一致");
+        }
+        
+        //校验手机号是否已注册
+        User existingUser = userMapper.findByPhone(registerDTO.getPhone());
+        if (existingUser != null) {
+            throw new IllegalArgumentException("该手机号已注册");
+        }
+        
+        //密码加密
+        String encodedPassword = passwordEncoder.encode(registerDTO.getPassword());
+        
+        //创建用户并保存
+        User user = User.builder()
+                .phone(registerDTO.getPhone())
+                .password(encodedPassword)
+                .nickname(registerDTO.getNickname() != null ? registerDTO.getNickname() : "用户" + registerDTO.getPhone().substring(7))
+                .createdTime(LocalDateTime.now())
+                .updatedTime(LocalDateTime.now())
+                .build();
+        
+        userMapper.insertUser(user);
     }
 }
