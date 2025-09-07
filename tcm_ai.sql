@@ -13,7 +13,7 @@ CREATE TABLE t_user (
     phone VARCHAR(20) UNIQUE COMMENT '手机号（可用于普通登录的账号，也可仅作为联系信息，唯一）',
     status TINYINT DEFAULT 1 COMMENT '用户状态：1-正常，0-禁用（防止无效账号登录）',
     created_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '账号创建时间',
-    updated_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE UPDATE CURRENT_TIMESTAMP COMMENT '信息更新时间'
+    updated_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '信息更新时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户主表（存储所有用户公共信息）';
 
 -- 登录凭证表
