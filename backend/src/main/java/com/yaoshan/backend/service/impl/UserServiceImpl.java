@@ -6,10 +6,10 @@ import com.yaoshan.backend.constant.MessageConstant;
 import com.yaoshan.backend.exception.LoginFailedException;
 import com.yaoshan.backend.exception.PasswordErrorException;
 import com.yaoshan.backend.mapper.UserMapper;
-import com.yaoshan.backend.pojo.NormalUserLoginDTO;
+import com.yaoshan.backend.pojo.DTO.NormalUserLoginDTO;
 import com.yaoshan.backend.pojo.User;
-import com.yaoshan.backend.pojo.UserLoginDTO;
-import com.yaoshan.backend.pojo.UserRegisterDTO;
+import com.yaoshan.backend.pojo.DTO.UserLoginDTO;
+import com.yaoshan.backend.pojo.DTO.UserRegisterDTO;
 import com.yaoshan.backend.service.UserService;
 import com.yaoshan.backend.utils.HttpClientUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -40,15 +40,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    /**
-     * 根据openid查询用户
-     * @param openid
-     * @return
-     */
-    public User findByOpenid(String openid) {
 
-        return userMapper.findByOpenid(openid);
-    }
 
     /**
      * 根据id查询用户

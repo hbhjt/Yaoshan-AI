@@ -1,10 +1,10 @@
 package com.yaoshan.backend.service;
 
 
-import com.yaoshan.backend.pojo.NormalUserLoginDTO;
+import com.yaoshan.backend.pojo.DTO.NormalUserLoginDTO;
 import com.yaoshan.backend.pojo.User;
-import com.yaoshan.backend.pojo.UserLoginDTO;
-import com.yaoshan.backend.pojo.UserRegisterDTO;
+import com.yaoshan.backend.pojo.DTO.UserLoginDTO;
+import com.yaoshan.backend.pojo.DTO.UserRegisterDTO;
 
 import java.util.List;
 

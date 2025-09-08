@@ -1,4 +1,4 @@
-package com.yaoshan.backend.pojo;
+package com.yaoshan.backend.pojo.DTO;
 
 import lombok.Data;
 

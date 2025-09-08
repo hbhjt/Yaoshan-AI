@@ -2,12 +2,12 @@ package com.yaoshan.backend.controller;
 
 import com.yaoshan.backend.exception.LoginFailedException;
 import com.yaoshan.backend.exception.PasswordErrorException;
-import com.yaoshan.backend.pojo.NormalUserLoginDTO;
+import com.yaoshan.backend.pojo.DTO.NormalUserLoginDTO;
 import com.yaoshan.backend.pojo.Result;
 import com.yaoshan.backend.pojo.User;
-import com.yaoshan.backend.pojo.UserLoginDTO;
-import com.yaoshan.backend.pojo.UserLoginVO;
-import com.yaoshan.backend.pojo.UserRegisterDTO;
+import com.yaoshan.backend.pojo.DTO.UserLoginDTO;
+import com.yaoshan.backend.pojo.VO.UserLoginVO;
+import com.yaoshan.backend.pojo.DTO.UserRegisterDTO;
 import com.yaoshan.backend.service.UserService;
 import com.yaoshan.backend.utils.JwtUtil;
 import org.slf4j.Logger;
