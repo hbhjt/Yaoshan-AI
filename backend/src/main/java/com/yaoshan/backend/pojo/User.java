@@ -15,15 +15,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements Serializable {
-    private Long userId;               // 用户ID
-    private String openid;             // 微信OpenID
-    private String phone;              // 手机号
-    private String password;           // 密码
-    private String nickname;           // 昵称
-    private String avatarUrl;          // 头像URL
-    private String physiqueTags;       // 体质标签（如阴虚/阳虚）
-    private String dietaryRestrictions;// 饮食禁忌
-    private String tastePreferences;   // 口味偏好
+    private Long userId;          // 用户唯一ID
+    private String nickname;      // 用户昵称
+    private String avatarUrl;     // 用户头像URL
+    private String phone;         // 手机号
+    private Integer status;       // 用户状态 1-正常,0-禁用
     private LocalDateTime createdTime; // 创建时间
     private LocalDateTime updatedTime; // 更新时间
 }

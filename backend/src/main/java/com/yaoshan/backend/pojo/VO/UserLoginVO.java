@@ -1,4 +1,4 @@
-package com.yaoshan.backend.pojo;
+package com.yaoshan.backend.pojo.VO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -3,10 +3,9 @@ package com.yaoshan.backend.service;
 import com.yaoshan.backend.exception.LoginFailedException;
 import com.yaoshan.backend.exception.PasswordErrorException;
 import com.yaoshan.backend.mapper.UserMapper;
-import com.yaoshan.backend.pojo.NormalUserLoginDTO;
+import com.yaoshan.backend.pojo.DTO.NormalUserLoginDTO;
 import com.yaoshan.backend.pojo.User;
-import com.yaoshan.backend.pojo.UserLoginDTO;
-import com.yaoshan.backend.pojo.UserRegisterDTO;
+import com.yaoshan.backend.pojo.DTO.UserRegisterDTO;
 import com.yaoshan.backend.service.impl.UserServiceImpl;
 import com.yaoshan.backend.utils.HttpClientUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
