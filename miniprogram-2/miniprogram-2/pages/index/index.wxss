@@ -1,0 +1,184 @@
+/**index.wxss**/
+/* 搜索框容器 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #F5F5F5; 
+  border-radius: 30rpx;
+  padding: 10rpx 16rpx;
+  margin: 20rpx;
+}
+
+/* 搜索图标 */
+.search-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 15rpx;
+}
+
+/* 输入框 */
+.search-input {
+  flex: 1;
+  font-size: 20rpx;
+  color: #333;
+  background: transparent;
+  border: none;
+}
+
+/* 右侧功能图标 */
+.action-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-left: 12rpx;
+}
+/**轮播器**/
+.swiper{
+  height: 280rpx;
+}
+.swiper-image{
+  width: 100%;
+  height:100%;
+  display: flex;
+}
+/* 卡片行*/
+.card-row {
+  display: flex;
+  justify-content: space-between; 
+  padding: 8px 16px;
+  gap: 8px;
+}
+
+/* 单个卡片 */
+.card {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+/* 图标容器 */
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background:rgb(217, 245, 252);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+/* 图标图片 */
+.card-icon image {
+  width: 24px;
+  height: 24px;
+}
+
+/* 卡片标题*/
+.card-title {
+  font-size: 15px; 
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+/* 卡片描述*/
+.card-desc {
+  font-size: 13px;
+  color: #999;
+}
+/*养生资讯*/
+/* 容器 */
+.health-news {
+  padding: 100rpx 20rpx;
+}
+/* 标题栏 */
+.news-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.header-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+}
+.header-more {
+  font-size: 28rpx;
+  color: #999;
+  text-decoration: none;
+}
+
+/* 两列网格布局 */
+.news-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* 卡片容器 */
+.news-card {
+  width: 48%;
+  margin-bottom: 30rpx;
+  background: #f9f9f9;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+/* 封面区域 */
+.card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; 
+}
+.media-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 视频标记（播放按钮） */
+.video-tag {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80rpx;
+  height: 80rpx;
+}
+.play-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* 时长标签 */
+.duration-label {
+  position: absolute;
+  bottom: 15rpx;
+  right: 15rpx;
+  padding: 6rpx 12rpx;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 22rpx;
+  border-radius: 10rpx;
+}
+
+/* 标题 & 播放量 */
+.card-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* 最多显示2行，超出省略 */
+  overflow: hidden;
+  font-size: 28rpx;
+  color: #333;
+  padding: 16rpx;
+}
+.card-play {
+  font-size: 24rpx;
+  color: #666;
+  padding: 0 16rpx 16rpx;
+}

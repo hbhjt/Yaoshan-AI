@@ -1,0 +1,57 @@
+<!--pages/collect/collect.wxml-->
+<view class="bar">
+<text class="title">收藏宝库</text>
+<image class="icon" src="/assets/folder.png"mode ="aspectFill" /></view>
+<!--下方-->
+<view class="tabs">
+  <view 
+    class="tab {{currentTab === 'medicine' ? 'tab-active' : ''}}" 
+    bindtap="handleTabSwitch" 
+    data-tab="medicine"
+  >
+    药膳方案
+  </view>
+  <view 
+    class="tab {{currentTab === 'milkTea' ? 'tab-active' : ''}}" 
+    bindtap="handleTabSwitch" 
+    data-tab="milkTea"
+  >
+    奶茶配方
+  </view>
+</view>
+<view class="medicine-list" wx:if="{{currentTab === 'medicine'}}">
+  <block wx:for="{{medicineList}}" wx:key="index">
+    <view class="medicine-item">
+      <view class="item-left">
+        <image src="{{item.image}}" mode="widthFix"></image>
+      </view>
+      <view class="item-middle">
+        <view class="item-title">{{item.title}}</view>
+        <view class="item-desc">{{item.desc}}</view>
+        <view class="item-tag">{{item.suitable}}</view>
+      </view>
+      <view class="item-right">
+        <view class="badge">验方</view>
+        <view class="collect-time">{{item.collectTime}}</view>
+      </view>
+    </view>
+  </block>
+</view>
+<view class="milk-tea-list" wx:if="{{currentTab === 'milkTea'}}">
+  <block wx:for="{{milkTeaList}}" wx:key="index">
+    <view class="medicine-item">
+      <view class="item-left">
+        <image src="{{item.image}}" mode="widthFix"></image>
+      </view>
+      <view class="item-middle">
+        <view class="item-title">{{item.title}}</view>
+        <view class="item-desc">{{item.desc}}</view>
+        <view class="item-tag">{{item.suitable}}</view>
+      </view>
+      <view class="item-right">
+        <view class="badge">配方</view>
+        <view class="collect-time">{{item.collectTime}}</view>
+      </view>
+    </view>
+  </block>
+</view>

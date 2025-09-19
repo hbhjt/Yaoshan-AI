@@ -1,0 +1,128 @@
+<!--pages/meal/meal.wxml-->
+<!--基本资料-->
+<view class="basic">
+  <!-- 页面标题 -->
+  <view class="title">我的健康画像</view>
+  <view class="card">
+    <view class="basic-title">基本资料</view>
+    <view class="form-item">
+      <text class="label">年龄</text>
+      <input 
+        class="input-box" 
+        placeholder="请输入年龄" 
+        type="number"
+      />
+    </view>
+    <!-- 性别 -->
+    <view class="form-item">
+      <text class="label">性别</text>
+      <radio-group class="radio-group">
+        <label class="radio-item">
+          <radio value="male" /> 男
+        </label>
+        <label class="radio-item">
+          <radio value="female" /> 女
+        </label>
+      </radio-group>
+    </view>
+  </view>
+</view>
+<!-- 近期指标 -->
+<view class="recent">
+  <view class="recent-title">近期指标</view>
+  <!-- 血压 -->
+  <view class="recent-group">
+    <view class="recent-label">血压</view>
+    <view class="recent-buttons">
+      <button 
+        bindtap="handleIndexSelect" 
+        data-type="bloodPressure" 
+        data-value="low" 
+        class="recent-btn {{bloodPressure === 'low' ? 'recent-btn-active' : ''}}"
+      >偏低</button>
+      <button 
+        bindtap="handleIndexSelect" 
+        data-type="bloodPressure" 
+        data-value="normal" 
+        class="recent-btn {{bloodPressure === 'normal' ? 'recent-btn-active' : ''}}"
+      >正常</button>
+      <button 
+        bindtap="handleIndexSelect" 
+        data-type="bloodPressure" 
+        data-value="high" 
+        class="recent-btn {{bloodPressure === 'high' ? 'recent-btn-active' : ''}}"
+      >偏高</button>
+    </view>
+  </view>
+  <!-- 血糖 -->
+  <view class="recent-group">
+    <view class="recent-label">血糖</view>
+    <view class="recent-buttons">
+      <button 
+        bindtap="handleIndexSelect" 
+        data-type="bloodSugar" 
+        data-value="low" 
+        class="recent-btn {{bloodSugar === 'low' ? 'recent-btn-active' : ''}}"
+      >偏低</button>
+      <button 
+        bindtap="handleIndexSelect" 
+        data-type="bloodSugar" 
+        data-value="normal" 
+        class="recent-btn {{bloodSugar === 'normal' ? 'recent-btn-active' : ''}}"
+      >正常</button>
+      <button 
+        bindtap="handleIndexSelect" 
+        data-type="bloodSugar" 
+        data-value="high" 
+        class="recent-btn {{bloodSugar === 'high' ? 'recent-btn-active' : ''}}"
+      >偏高</button>
+    </view>
+  </view>
+</view>
+<!--身体状况自述-->
+<view class="recent">
+  <text class="tag-title">身体状况自述</text>
+  <checkbox-group bindchange="handleTagChange">
+    <view class="tag-list">
+      <label 
+        wx:for="{{tags}}" 
+        wx:key="name" 
+        class="tag-item"
+      >
+        <checkbox 
+          class="tag-checkbox" 
+          value="{{item.name}}"
+        />
+        <view class="tag {{item.checked ? 'tag-checked' : ''}}">
+          {{item.name}}
+        </view>
+      </label>
+    </view>
+  </checkbox-group>
+</view>
+<!--疾病史-->
+<view class="disease-card">
+  <text class="disease-title">慢性病/疾病史</text>
+  <checkbox-group bindchange="handleDiseaseChange">
+    <view class="disease-list">
+      <label 
+        class="disease-item" 
+        wx:for="{{diseases}}" 
+        wx:key="name"
+      >
+        <view class="custom-checkbox {{item.checked ? 'checked' : ''}}">
+          <checkbox value="{{item.name}}" class="native-checkbox" />
+          <view class="check-icon"></view>
+        </view>
+        <text class="disease-label">{{item.name}}</text>
+      </label>
+    </view>
+  </checkbox-group>
+</view>
+<view class="AI">
+  <!-- 核心：小程序<button> + 自定义圆形样式 -->
+  <button class="circle-btn" bindtap="onGenerate" aria-lable="生成个性化药膳方案">
+    生成我的药膳方案
+  </button>
+  <text class="desc-text">基于中医理论，个性定制专属药膳</text>
+</view>
