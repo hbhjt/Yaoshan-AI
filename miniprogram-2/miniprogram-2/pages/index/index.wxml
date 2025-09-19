@@ -1,0 +1,64 @@
+<view class="search-bar">
+  <!-- 左侧搜索图标 -->
+  <image class="search-icon" src="/assets/find.png"></image>  
+  <!-- 输入框 -->
+  <input 
+    class="search-input" 
+    placeholder="请输入药材、症状或功效..." 
+    placeholder-style="color: #999;font-size: 25rpx;"/>
+  <!-- 右侧功能图标（扫码） -->
+  <image class="action-icon" src="/assets/scan.png"></image>  
+</view>
+<view class="swiper">
+  <swiper autoplay interval="3000" 
+  indicator-dots indicator-color>
+    <swiper-item>
+    <image class="swiper-image" src="/assets/八方食养.jpg" mode="aspectFit" show-menu-by-longpress></image>
+    </swiper-item>
+    <swiper-item>
+    <image class="swiper-image" src="/assets/汤汤水水.jpg" mode="aspectFit" show-menu-by-longpress></image>
+    </swiper-item>
+    <swiper-item>
+    <image class="swiper-image" src="/assets/茵陈陈皮老鸭汤.jpg" mode="aspectFit" show-menu-by-longpress></image>
+    </swiper-item>
+  </swiper>
+</view>
+<view class="card-row">
+  <navigator url="/pages/soup-detail/soup-detail" class="card">
+    <image class="card-icon" src="/assets/classify.png"></image>
+    <text class="card-title">汤方专区</text>
+    <text class="card-desc">滋阴润燥</text>
+  </navigator>
+  <navigator url="/pages/medicine/medicine" class="card">
+    <image class="card-icon" src="/assets/pills.png"></image>
+    <text class="card-title">药膳精选</text>
+    <text class="card-desc">健脾和胃</text>
+  </navigator>
+  <navigator url="/pages/tea/tea" class="card">
+    <image class="card-icon" src="/assets/teapot.png"></image>
+    <text class="card-title">茶方秘典</text>
+    <text class="card-desc">疏肝理气</text>
+  </navigator>
+</view>
+<view class="health-news">
+  <!-- 标题栏 -->
+  <view class="news-header">
+    <text class="header-title">养生资讯</text>
+    <navigator url="/pages/medicine/medicine" class="header-more">更多 ></navigator>
+  </view>
+  <view class="news-grid">
+    <block wx:for="{{newsList}}" wx:key="id">
+      <view class="news-card">
+        <view class="card-media">
+          <image class="media-img" src="{{item.cover}}"></image>
+          <view wx:if="{{item.isVideo}}" class="video-tag">
+            <image class="play-icon" src="/images/play.png"></image>
+          </view>
+          <text wx:if="{{item.duration}}" class="duration-label">{{item.duration}}</text>
+        </view>
+        <text class="card-title">{{item.title}}</text>
+        <text class="card-play">{{item.playCount}}万次播放</text>
+      </view>
+    </block>
+  </view>
+</view>

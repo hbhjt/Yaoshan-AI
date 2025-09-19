@@ -1,0 +1,35 @@
+<view class="detail-container">
+  <!-- 饮品图片 -->
+  <image class="drink-img" src="{{currentDrink.image}}" mode="widthFix"></image>
+
+  <!-- 基本信息（名称、价格、标签） -->
+  <view class="basic-info">
+    <view class="name">{{currentDrink.name}}</view>
+    <view class="price">¥{{currentDrink.price}}</view>
+    <view class="tags">
+      <view class="tag" wx:for="{{currentDrink.tags}}" wx:key="index">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 详细描述 -->
+  <view class="section">
+    <view class="section-title">产品介绍</view>
+    <view class="section-content">{{currentDrink.detail}}</view>
+  </view>
+
+  <!-- 配料表 -->
+  <view class="section">
+    <view class="section-title">配料表</view>
+    <view class="section-content">
+      <view class="ingredient" wx:for="{{currentDrink.ingredients}}" wx:key="index">
+        • {{item}}
+      </view>
+    </view>
+  </view>
+
+  <!-- 营养信息 -->
+  <view class="section">
+    <view class="section-title">营养成分</view>
+    <view class="section-content">{{currentDrink.nutrition}}</view>
+  </view>
+</view>

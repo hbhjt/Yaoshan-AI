@@ -1,0 +1,224 @@
+/* pages/meal/meal.wxss */
+/* 基础资料*/
+.basic {
+  padding: 20rpx;
+}
+.title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #1677ff;
+  margin-bottom: 20rpx;
+}
+.card {
+  background: #ffffff;
+  border-radius: 30rpx;
+  padding: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+}
+.basic-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 28rpx;
+  color: #333;
+}
+.form-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+.label {
+  font-size: 26rpx;
+  color: #666;
+  width: 120rpx; 
+}
+.input-box {
+  flex: 1;
+  height: 60rpx;
+  border: 1px solid #e5e5e5;
+  border-radius: 10rpx;
+  padding: 0 20rpx;
+  font-size: 26rpx;
+  color: #333;
+}
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.radio-item {
+  margin-right: 40rpx;
+  font-size: 26rpx;
+  color: #333;
+}
+radio {
+  margin-right: 8rpx;
+  transform: scale(0.8);
+}
+/* 近期指标 */
+.recent {
+  margin: 20rpx;
+  padding: 20rpx;
+  background-color: #ffffff;
+  border-radius: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
+}
+.recent-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 24rpx;
+}
+.recent-group {
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+.recent-label {
+  font-size: 24rpx;
+  color: #666666;
+  margin-bottom: 15rpx;
+  display: inline-block;
+}
+.recent-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20rpx; 
+}
+.recent-btn {
+  width: 70rpx;
+  height: 60rpx;
+  line-height: 30rpx;
+  text-align: center;
+  font-size: 24rpx;
+  border: 2rpx solid #e5e5e5;
+  border-radius: 8rpx;
+  background-color: #ffffff;
+  color: #666666;
+}
+.recent-btn-active {
+  background-color: #2e8ff0;
+  border-color: #2e8ff0;
+  color: #ffffff;
+}
+/*身体状况自述部分渲染*/
+.tag-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 30rpx;
+  display: block;
+  color: rgb(0, 0, 0);
+}
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+.tag-item {
+  display: inline-flex;
+}
+.tag-checkbox {
+  display: none;
+}
+.tag {
+  padding: 14rpx 28rpx;
+  background-color: #ECECEC;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+.tag-checked {
+  background-color: #1677FF;
+  color: #FFFFFF;
+}
+/*疾病史部分*/
+.disease-card {
+  background: #FFF;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin: 20rpx 0;
+}
+
+.disease-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 24rpx;
+  display: block;
+}
+.disease-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.native-checkbox {
+  display: none;
+}
+.custom-checkbox {
+  width: 32rpx;
+  height: 32rpx;
+  border: 2rpx solid #999;
+  border-radius: 4rpx;
+  margin-right: 16rpx;
+  position: relative;
+}
+.custom-checkbox.checked {
+  background-color: #1677FF;
+  border-color: #1677FF;
+}
+.check-icon::after {
+  content: "";
+  position: absolute;
+  top: 2rpx;
+  left: 8rpx;
+  width: 12rpx;
+  height: 20rpx;
+  border-right: 4rpx solid #FFF;
+  border-bottom: 4rpx solid #FFF;
+  transform: rotate(45deg); 
+  opacity: 0;
+}
+.custom-checkbox.checked .check-icon::after {
+  opacity: 1;
+}
+.disease-label {
+  font-size: 28rpx;
+  color: #333;
+}
+/*按钮部分*/
+.AI {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+}
+.circle-btn {
+  border: none !important;
+  background: transparent !important;
+  padding: 0;
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  background-color: #0F4C81 !important; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 34rpx;
+  color: #FFFFFF;
+  text-align: center;
+  line-height: 1.2;
+  padding: 0 20rpx; 
+  box-shadow: 0 10rpx 20rpx rgba(0,0,0,0.15);
+  transition: transform 0.3s;
+}
+.circle-btn::after {
+  border: none !important;
+}
+.circle-btn:active {
+  transform: scale(0.95);
+}
+.desc-text {
+  font-size: 26rpx;
+  color: #666666;
+  margin-top: 30rpx;
+  text-align: center;
+  width: 60%;
+  line-height: 1.5;
+}

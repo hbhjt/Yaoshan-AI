@@ -1,0 +1,96 @@
+/* pages/collect/collect.wxss */
+.bar{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.title {
+  font-size: 30rpx;
+  color: black;
+  margin-right: 100rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  margin-top: 20rpx;
+}
+.icon {
+  width: 30rpx;
+  height: 30rpx;
+}
+.tabs {
+  display: flex;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-bottom: 2rpx solid #f5f5f5;
+}
+.tab {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  color: #666;
+}
+.tab-active {
+  color: #b35959;
+  border-bottom: 4rpx solid #b35959;
+}
+.medicine-list,
+.milk-tea-list {
+  padding: 20rpx;
+}
+.medicine-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx;
+  background-color: #fff;
+  border-radius: 12rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+.item-left image {
+  width: 200rpx;
+  height: auto;
+  border-radius: 8rpx;
+}
+.item-middle {
+  flex: 1;
+  margin: 0 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.item-title {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #333;
+}
+.item-desc {
+  font-size: 24rpx;
+  color: #666;
+  margin-top: 12rpx;
+}
+.item-tag {
+  display: inline-block;
+  background-color: #f8e9e9;
+  color: #b35959;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  margin-top: 12rpx;
+}
+.item-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.badge {
+  background-color: #f8e9e9;
+  color: #b35959;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  margin-bottom: 12rpx;
+}
+.collect-time {
+  color: #999;
+  font-size: 24rpx;
+}
