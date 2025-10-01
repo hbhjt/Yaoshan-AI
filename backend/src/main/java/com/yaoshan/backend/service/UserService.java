@@ -1,8 +1,8 @@
 package com.yaoshan.backend.service;
 
 
-import com.yaoshan.backend.pojo.DTO.NormalUserLoginDTO;
 import com.yaoshan.backend.pojo.User;
+import com.yaoshan.backend.pojo.DTO.NormalUserLoginDTO;
 import com.yaoshan.backend.pojo.DTO.UserLoginDTO;
 import com.yaoshan.backend.pojo.DTO.UserRegisterDTO;
 
@@ -23,9 +23,5 @@ public interface UserService {
 
     User normalLogin(NormalUserLoginDTO loginDTO);
 
-    /**
-     * 用户注册
-     * @param registerDTO 注册信息
-     */
     void register(UserRegisterDTO registerDTO);
 }

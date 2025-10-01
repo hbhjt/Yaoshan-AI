@@ -7,6 +7,7 @@ import com.yaoshan.backend.pojo.Result;
 import com.yaoshan.backend.pojo.User;
 import com.yaoshan.backend.pojo.DTO.UserLoginDTO;
 import com.yaoshan.backend.pojo.VO.UserLoginVO;
+import com.yaoshan.backend.pojo.VO.UserProfileVO;
 import com.yaoshan.backend.pojo.DTO.UserRegisterDTO;
 import com.yaoshan.backend.service.UserService;
 import com.yaoshan.backend.utils.JwtUtil;
@@ -55,31 +56,58 @@ public class UserController {
     public Result<String> userRegister(@RequestBody UserRegisterDTO registerDTO){
         log.info("用户注册:{}", registerDTO);
         try {
+            //参数校验
+            if (registerDTO.getPhone() == null || registerDTO.getPhone().isEmpty()) {
+                return Result.error("手机号不能为空");
+            }
+            if (registerDTO.getPassword() == null || registerDTO.getPassword().isEmpty()) {
+                return Result.error("密码不能为空");
+            }
+            if (registerDTO.getConfirmPassword() == null || registerDTO.getConfirmPassword().isEmpty()) {
+                return Result.error("确认密码不能为空");
+            }
+            
             //调用service注册用户信息
             userService.register(registerDTO);
             return Result.success("注册成功");
+        } catch (IllegalArgumentException e) {
+            log.error("用户注册参数校验失败: {}", e.getMessage());
+            return Result.error(e.getMessage());
         } catch (Exception e) {
             log.error("用户注册失败: {}", e.getMessage(), e);
-            return Result.error("注册失败：" + e.getMessage());
+            return Result.error("注册失败，请稍后重试");
         }
     }
 
     /**
-     * 用户微信登录接口
+     * 微信登录接口
      * @param userLoginDTO 包含微信登录code的请求体
      * @return 登录结果，包含用户信息和JWT令牌
      */
     @PostMapping("/wx/login")
     public Result<UserLoginVO> wxlogin(@RequestBody UserLoginDTO userLoginDTO) {
-        log.info("微信用户登录:{}", userLoginDTO.getCode());
+        log.info("微信用户登录请求");
         try {
+            //参数校验
+            if (userLoginDTO == null || userLoginDTO.getCode() == null || userLoginDTO.getCode().isEmpty()) {
+                log.warn("微信登录失败：code为空");
+                return Result.error("登录失败，请重试");
+            }
+            
+            log.info("微信登录，code: {}", userLoginDTO.getCode());
+            
             // 1. 调用Service获取用户信息
             User user = userService.wxlogin(userLoginDTO);
+            
+            if (user == null) {
+                log.error("微信登录失败：获取用户信息失败");
+                return Result.error("登录失败，请重试");
+            }
 
-            // 2. 生成JWT令牌（只传claims，其他参数由JwtUtil从JwtConfig中获取）
+            // 2. 生成JWT令牌
             Map<String, Object> claims = new HashMap<>();
             claims.put("userId", user.getUserId());
-            String token = jwtUtil.createJWT(claims); // 修正：用注入的jwtUtil实例调用，只传claims
+            String token = jwtUtil.createJWT(claims);
 
             // 3. 构建返回VO
             UserLoginVO userLoginVO = UserLoginVO.builder()
@@ -87,6 +115,8 @@ public class UserController {
                     .openid(user.getOpenid())
                     .token(token)
                     .build();
+            
+            log.info("微信用户登录成功：userId={}", user.getUserId());
             return Result.success(userLoginVO);
         } catch (LoginFailedException e) {
             log.error("微信登录失败：{}", e.getMessage());
@@ -97,12 +127,31 @@ public class UserController {
         }
     }
 
+    /**
+     * 基础登录接口
+     * @param loginDTO 登录信息
+     * @return 登录结果，包含用户信息和JWT令牌
+     */
     @PostMapping("/normal/login")
     public Result<UserLoginVO> normalLogin(@RequestBody NormalUserLoginDTO loginDTO) {
-        log.info("普通用户登录:{}", loginDTO);
+        log.info("用户登录手机号={}", loginDTO.getPhone());
         try {
+            //参数校验
+            if (loginDTO.getPhone() == null || loginDTO.getPhone().isEmpty()) {
+                return Result.error("手机号不能为空");
+            }
+            if (loginDTO.getPassword() == null || loginDTO.getPassword().isEmpty()) {
+                return Result.error("密码不能为空");
+            }
+            
             // 调用service层的普通登录方法
             User user = userService.normalLogin(loginDTO);
+            
+            // 判断用户是否为空
+            if (user == null) {
+                log.error("登录失败：用户不存在或登录信息有误");
+                return Result.error("登录失败，请重试");
+            }
 
             // 生成JWT令牌
             Map<String, Object> claims = new HashMap<>();
@@ -110,16 +159,18 @@ public class UserController {
             String token = jwtUtil.createJWT(claims);
             
             // 封装返回结果
-            UserLoginVO userLoginVO = new UserLoginVO();
-            userLoginVO.setId(user.getUserId());
-            userLoginVO.setToken(token);
+            UserLoginVO userLoginVO = UserLoginVO.builder()
+                    .id(user.getUserId())
+                    .token(token)
+                    .openid(user.getOpenid())
+                    .build();
             
             return Result.success(userLoginVO);
         } catch (LoginFailedException e) {
-            log.error("登录失败：", e);
+            log.error("登录失败：{}", e.getMessage());
             return Result.error(e.getMessage());
         } catch (PasswordErrorException e) {
-            log.error("密码错误：", e);
+            log.error("密码错误：{}", e.getMessage());
             return Result.error(e.getMessage());
         } catch (Exception e) {
             log.error("系统异常：", e);
@@ -128,16 +179,50 @@ public class UserController {
     }
     
     /**
-     * 获取当前用户信息（依赖JWT拦截器提前解析userId）
+     * 用户信息查询接口
+     * 获取当前登录用户的详细信息
      */
     @GetMapping("/profile")
-    public Result<User> getProfile(HttpServletRequest request) {
-        Long userId = (Long) request.getAttribute("userId");
-        if (userId == null) {
-            return Result.error("未登录或Token无效");
+    public Result<UserProfileVO> getProfile(HttpServletRequest request) {
+        try {
+            Long userId = (Long) request.getAttribute("userId");
+            
+            // 验证用户是否已登录
+            if (userId == null) {
+                log.warn("用户信息查询失败：未登录或Token无效");
+                return Result.error("未登录或Token无效");
+            }
+            
+            log.info("用户信息查询请求：userId={}", userId);
+            
+            // 查询用户信息
+            User user = userService.findById(userId);
+            
+            if (user == null) {
+                log.error("用户信息查询失败：用户不存在 userId={}", userId);
+                return Result.error("用户不存在");
+            }
+            
+            // 构建安全的用户信息VO，避免返回敏感信息
+            UserProfileVO userProfileVO = UserProfileVO.builder()
+                    .userId(user.getUserId())
+                    .nickname(user.getNickname())
+                    .avatarUrl(user.getAvatarUrl())
+                    .phone(user.getPhone())
+                    .status(user.getStatus())
+                    .physiqueTags(user.getPhysiqueTags())
+                    .dietaryRestrictions(user.getDietaryRestrictions())
+                    .tastePreferences(user.getTastePreferences())
+                    .createdTime(user.getCreatedTime())
+                    .updatedTime(user.getUpdatedTime())
+                    .build();
+            
+            log.info("用户信息查询成功：userId={}", userId);
+            return Result.success(userProfileVO);
+        } catch (Exception e) {
+            log.error("用户信息查询异常：", e);
+            return Result.error("系统繁忙，请稍后再试");
         }
-        User user = userService.findById(userId);
-        return Result.success(user);
     }
 
     /**

@@ -1,26 +1,26 @@
-package com.yaoshan.backend.pojo;
+package com.yaoshan.backend.pojo.VO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Slf4j
+/**
+ * 用户个人资料视图对象
+ * 用于返回用户非敏感信息给前端
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable {
+public class UserProfileVO implements Serializable {
     private Long userId;          // 用户唯一ID
-    private String openid;        // 微信OpenID
     private String nickname;      // 用户昵称
     private String avatarUrl;     // 用户头像URL
-    private String phone;         // 手机号
-    private String password;      // 密码
+    private String phone;         // 手机号（可根据需要决定是否返回）
     private Integer status;       // 用户状态 1-正常,0-禁用
     private String physiqueTags;  // 体质标签
     private String dietaryRestrictions; // 饮食禁忌

@@ -145,6 +145,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
     public User normalLogin(NormalUserLoginDTO loginDTO) {
 
          log.info("普通用户登录：手机号={}", loginDTO.getPhone());
